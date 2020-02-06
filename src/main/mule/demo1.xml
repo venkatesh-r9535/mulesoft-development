@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5f3d047b-c5d6-4de4-99a9-c5cf861b0614" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo1Flow" doc:id="89db8097-798c-4937-9fcc-f13d59f1ed4b" >
+		<http:listener doc:name="Listener" doc:id="a971acea-d660-48d6-9937-899aa15ec5f8" config-ref="HTTP_Listener_config" path="/demo1"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b8bd72a9-ed87-4fa9-b952-dcb353629128" message="started"/>
+		<ee:cache doc:name="Cache" doc:id="11e2d18e-47ce-489e-b1b3-ccc02d17ef00">
+			<ee:transform doc:name="Transform Message" doc:id="08a803bb-53e1-4386-bc75-af6ed6a555d3">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+	{"name": "Venkatesh",
+	"lastName": "Rangappa"
+	},
+	{"name": "Venkatesh1",
+	"lastName": "Rangappa1"
+	}
+]
+	
+	
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		</ee:cache>
+		<logger level="INFO" doc:name="Logger" doc:id="74c2490f-1b34-48f8-a5be-af199415f2fa" message="After cache"/>
+	</flow>
+	<flow name="demo1Flow1" doc:id="a6350da1-13a3-4e39-b76f-99c46c5173c3" >
+		<ee:transform doc:name="Transform Message" doc:id="af3df3a8-f0ec-42f5-9627-d652323ae320" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ((val, key) -> 
+  
+val mapObject ((v,k) -> {
+		(k): v
+	})
+)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="prices-xml" format="xml">
+      <types:example format="xml" element="prices" location="examples/prices.xml"/>
+    </types:type>
+    <types:type name="user-json" format="json">
+      <types:shape format="weave" example="examples/user.json"><![CDATA[%dw 2.0
+
+type user_json = Array<{|  name: String,   lastName: String|}> {"example": "[{\\\"name\\\":\\\"Venkatesh\\\",\\\"lastName\\\":\\\"Rangappa\\\"},{\\\"name\\\":\\\"Venkatesh1\\\",\\\"lastName\\\":\\\"Rangappa1\\\"}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#10f29509-d73d-49ba-a4b2-a9387c82bd92">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="prices-xml"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#af3df3a8-f0ec-42f5-9627-d652323ae320">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="user-json"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
